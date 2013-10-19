@@ -120,7 +120,6 @@ class Ui_MainWindow(object):
             if self.customerWindow is None:
                 self.window = QtGui.QMainWindow()
                 self.customerWindow = self.window
-                self.window.setAttribute(QtCore.Qt.WA_DeleteOnClose)
                 self.window.setGeometry(50, 50, 500, 100)
                 self.window.setWindowTitle('Customer Window')
             self.window = self.customerWindow
@@ -140,10 +139,10 @@ class Ui_MainWindow(object):
 from PySide import QtDeclarative
 
 class ControlMainWindow(QtGui.QMainWindow):
-  def __init__(self, parent=None):
-    super(ControlMainWindow, self).__init__(parent)
-    self.ui = Ui_MainWindow()
-    self.ui.setupUi(self)
+    def __init__(self, parent=None):
+        super(ControlMainWindow, self).__init__(parent)
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
    
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
