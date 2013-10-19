@@ -9,8 +9,10 @@
 import sys
 from PySide import QtCore, QtGui
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
+        self.customerWindow = None
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
         self.centralwidget = QtGui.QWidget(MainWindow)
@@ -113,13 +115,32 @@ class Ui_MainWindow(object):
         
     def lineScan(self):
         self.listWidget.addItem(self.lineEdit.text())
-        
-    def window(self):
-        msgBox = QtGui.QMessageBox()
-        msgBox.setText(self.lineEdit.text())
-        msgBox.exec_()
-        
 
+    def window(self):
+            if self.customerWindow is None:
+                self.window = QtGui.QMainWindow()
+                self.customerWindow = self.window
+                self.window.setAttribute(QtCore.Qt.WA_DeleteOnClose)
+                self.window.setGeometry(50, 50, 500, 100)
+                self.window.setWindowTitle('Customer Window')
+            self.window = self.customerWindow
+            self.layout = QtGui.QVBoxLayout()
+            
+            self.label = QtGui.QLabel(self.lineEdit.text())
+            font = QtGui.QFont()
+            font.setPointSize(20)
+            self.label.setFont(font)
+            self.layout.addWidget(self.label)
+            
+            self.labelTwo = QtGui.QLabel("PriceGoesHereLater")
+            self.labelTwo.setFont(font)
+            self.layout.addWidget(self.labelTwo)
+            
+            self.window.setLayout(self.layout)
+            self.window.setCentralWidget(self.label)
+            self.window.show()
+            
+            
 from PySide import QtDeclarative
 
 class ControlMainWindow(QtGui.QMainWindow):
