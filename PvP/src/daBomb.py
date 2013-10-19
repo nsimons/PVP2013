@@ -132,10 +132,6 @@ class Ui_MainWindow(object):
             self.label.setFont(font)
             self.layout.addWidget(self.label)
             
-            self.labelTwo = QtGui.QLabel("PriceGoesHereLater")
-            self.labelTwo.setFont(font)
-            self.layout.addWidget(self.labelTwo)
-            
             self.window.setLayout(self.layout)
             self.window.setCentralWidget(self.label)
             self.window.show()
