@@ -8,13 +8,13 @@
 # WARNING! All changes made in this file will be lost!
 import sys
 from PySide import QtCore, QtGui
-
+from MySQLScript import * # <--- REPLACE MED DIN MYSQL CLASS
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         self.customerWindow = None
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(800, 680)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton = QtGui.QPushButton(self.centralwidget)
@@ -68,18 +68,47 @@ class Ui_MainWindow(object):
         self.pushButton_17 = QtGui.QPushButton(self.centralwidget)
         self.pushButton_17.setGeometry(QtCore.QRect(560, 410, 65, 135))
         self.pushButton_17.setObjectName("pushButton_17")
-        self.listWidget = QtGui.QListWidget(self.centralwidget)
-        self.listWidget.setGeometry(QtCore.QRect(10, 20, 256, 521))
-        self.listWidget.setObjectName("listWidget")
+        
+        self.tableWidget = QtGui.QTableWidget(self.centralwidget)
+        self.tableWidget.setColumnCount(3)
+        self.tableWidget.setHorizontalHeaderItem(0, QtGui.QTableWidgetItem("ID"))
+        self.tableWidget.setHorizontalHeaderItem(1, QtGui.QTableWidgetItem("Item"))
+        self.tableWidget.setHorizontalHeaderItem(2, QtGui.QTableWidgetItem("Price"))
+        self.tableWidget.setColumnWidth(0, 25)
+        self.tableWidget.setColumnWidth(1, 107)
+        self.tableWidget.setColumnWidth(2, 70)
+        self.tableWidget.setGeometry(QtCore.QRect(10, 20, 256, 521))
+        self.tableWidget.setObjectName("tableWidget")
+        
         self.declarativeView = QtDeclarative.QDeclarativeView(self.centralwidget)
         self.declarativeView.setGeometry(QtCore.QRect(300, 20, 300, 200))
         self.declarativeView.setObjectName("declarativeView")
+        
+        #potential fix in the future, setters/getters istället för globals?
+        global rowCount
+        global tot
+        global dbROW
+        rowCount = 0
+        tot = 0
+        dbROW = ""
+        
+        self.totLabel = QtGui.QLabel(self.centralwidget)
+        self.totLabel.setGeometry(QtCore.QRect(10, 550, 341, 25))
+        self.totLabel.setObjectName("totLabel")
+        self.font = QtGui.QFont()
+        self.font.setPointSize(20)
+        self.totLabel.setFont(self.font)
+        
         self.lineEdit = QtGui.QLineEdit(self.centralwidget)
         self.lineEdit.setGeometry(QtCore.QRect(282, 230, 341, 25))
         self.lineEdit.setObjectName("lineEdit")
-        
-        self.lineEdit.returnPressed.connect(self.lineScan)
+        self.lineEdit.setFocus()
+        self.lineEdit.returnPressed.connect(self.DB)
         self.lineEdit.returnPressed.connect(self.window)
+        self.lineEdit.returnPressed.connect(self.lineReset)
+        
+        self.pushButton_6.clicked.connect(self.lineEdit.returnPressed)
+        self.pushButton_11.clicked.connect(self.buttonPress)
         
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
@@ -113,36 +142,66 @@ class Ui_MainWindow(object):
         self.pushButton_16.setText(QtGui.QApplication.translate("MainWindow", "6", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_17.setText(QtGui.QApplication.translate("MainWindow", "Delete", None, QtGui.QApplication.UnicodeUTF8))
         
-    def lineScan(self):
-        self.listWidget.addItem(self.lineEdit.text())
-
+    def DB(self):
+        global dbROW
+        global rowCount
+        global tot
+        self.tableWidget.setRowCount(rowCount+1)
+        line = self.lineEdit.text()
+        try: #testar om input är av typ "Int"
+            line = int(line)
+            line = str(line)
+            if (line): #testar om line existerar
+                if MySQLc.cur.execute("select id,item,price from itemTable where ID = " + line + ";"):
+                    #testar om MySQLc returnerar några rows överhuvudtaget
+                    for row in MySQLc.cur.fetchall():
+                        self.tableWidget.setItem(rowCount,0,QtGui.QTableWidgetItem(str(row[0])))
+                        self.tableWidget.setItem(rowCount,1,QtGui.QTableWidgetItem(str(row[1])))
+                        self.tableWidget.setItem(rowCount,2,QtGui.QTableWidgetItem(str(row[2])))
+                        rowCount += 1
+                        tot += row[2]
+                        dbROW = row[1] + " - " + str(row[2]) + " euro<br>Total Price: " + str(tot) + " euro"
+                        self.totLabel.setText("Total Price: " + str(tot) + " euro")
+                else: #no rows returned
+                    self.tableWidget.setRowCount(rowCount)
+            else: #empty line
+                self.tableWidget.setRowCount(rowCount)
+        except: #non-int
+            self.tableWidget.setRowCount(rowCount)
+        
     def window(self):
             if self.customerWindow is None:
                 self.window = QtGui.QMainWindow()
                 self.customerWindow = self.window
                 self.window.setGeometry(50, 50, 500, 100)
                 self.window.setWindowTitle('Customer Window')
+                self.window.setAttribute(QtCore.Qt.WA_ShowWithoutActivating)
             self.window = self.customerWindow
             self.layout = QtGui.QVBoxLayout()
             
-            self.label = QtGui.QLabel(self.lineEdit.text())
-            font = QtGui.QFont()
-            font.setPointSize(20)
-            self.label.setFont(font)
+            self.label = QtGui.QLabel(dbROW)
+            self.label.setFont(self.font)
             self.layout.addWidget(self.label)
             
             self.window.setLayout(self.layout)
             self.window.setCentralWidget(self.label)
             self.window.show()
+        
+    def lineReset(self):
+        self.lineEdit.setText("")
             
+    def buttonPress(self): #don't mind me, just testing :D
+        self.lineEdit.setText("1")
             
 from PySide import QtDeclarative
+
 
 class ControlMainWindow(QtGui.QMainWindow):
     def __init__(self, parent=None):
         super(ControlMainWindow, self).__init__(parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.ui.window()
    
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
