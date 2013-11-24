@@ -1,0 +1,36 @@
+Kickoffmötesprotokoll för sprint 3
+
+5.11.2013
+
+
+User stories:
+
+CUST6: As a customer, I can choose to get a receipt after the sale has been made. (Backloggad från sprint 2)
+
+CASH5: As a cashier, I can see the result of a credit card transaction.
+
+CUST7: As a customer, I can leave the items at the cashier desk while I go to my car 
+to get my wallet, and pay for the items later.
+
+CASH1: As a cashier, I can “shelf” an incomplete sale while the customer gets his or 
+her wallet and complete the sale afterwards. I can serve other customers while the original 
+customer is looking for the wallet.
+
+CASH4: As a cashier, I can add items to the sale by looking them up from the product 
+catalog.
+
+Prioritetsordning för user stories är följande: CUST6, CUST7, CASH1, CASH4, CASH5.
+
+Definition of done:
+
+CUST6: Listan på varor ska kunna sparas i JPEG-format.
+
+CASH5: Resultatet av betalning med kort ska synas på kassörens skärm.
+
+CASH1: Listan på varor ska kunna sparas i en tabell som kan återtas när man behöver den.
+
+CUST7: Samma som med CASH1. Listan på varor sparas i en tabell tills kunden kommer tillbaka, 
+därav kan andra kunder betjänas medan man väntar.
+
+CASH4: Kassören ska kunna hitta varorna i produktkatalogen för att därefter söka efter dem i 
+databasen och lägga till dem i varulistan.
