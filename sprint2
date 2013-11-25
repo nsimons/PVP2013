@@ -22,7 +22,8 @@ Prioritetsordning för user stories är följande: CUST3, CASH6, CUST2, SALE1, C
 
 Definition of done:
 
-CUST3: En numpad som syns för kassören, där man med två pilar kan traversera genom listan av inskannade varor. Man kan sedan radera en vald produkt och efter det uppdateras listan.
+CUST3: En numpad som syns för kassören, där man med två pilar kan traversera genom listan av inskannade varor. 
+Man kan sedan radera en vald produkt och efter det uppdateras listan.
 
 CASH6: Vi skriver manuellt in vad kunden betalar, sedan räknar programmet ut vad växeln blir.
 
@@ -32,5 +33,32 @@ CUST2: Pengarna som betalas kontant dras av från slutsumman, resten kan betalas
 
 SALE1: Priserna från produktkatalogen ska kunna definieras.
 
+---------------------------------------------------------------------------------------------------------
 
 
+Retrospektmötesprotokoll för sprint 2
+
+5.11.2013
+
+Färdiga user stories:
+
+CUST3: As a customer, I can change my mind in the middle of the sale and remove 
+or add additional items.
+
+CUST6: As a customer, I can choose to get a receipt after the sale has been made.
+
+CUST2: As a customer, I can pay for all or some of the items with cash.
+
+SALE1: As a salesman, I can deﬁne the prices of the products retrieved from the 
+product catalog.
+
+Backloggade user stories:
+
+CASH6:As a cashier, I can see the amount of change to return to the customer after 
+he or she has paid with cash.
+
+Lärdomar och förbättringar inför följande sprint:
+
+Vi har nu samlat all vår kod i en enda stor pythonfil, vilket gör koden rörig och svåröverskådlig. 
+Vi kommer att ägna en del av sprint 3 till att dela upp koden i mindre delar, så att vi lättare kan 
+fortsätta arbeta med den.
