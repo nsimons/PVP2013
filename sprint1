@@ -19,10 +19,12 @@ Prioritetsordning för user stories är följande: CASH2, CASH3, CUST4, CUST3
 
 Definition of done:
 
-CUST4: Två skärmar, en vänd till kunden och en vänd till kassören. Skärmen vänd mot kassören kommer att visa alla aktuella varor, pris för var och en av varorna samt totalt pris att betala.
+CUST4: Två skärmar, en vänd till kunden och en vänd till kassören. Skärmen vänd mot kassören kommer att visa 
+alla aktuella varor, pris för var och en av varorna samt totalt pris att betala.
 Kundens skärm kommer att visa namnet och priset för den senast inskannade varan samt totalpris för alla varor.
 
-CUST3: En numpad som syns för kassören, där man med två pilar kan traversera genom listan av inskannade varor. Man kan sedan radera en vald produkt och efter det uppdateras listan.
+CUST3: En numpad som syns för kassören, där man med två pilar kan traversera genom listan av inskannade varor. 
+Man kan sedan radera en vald produkt och efter det uppdateras listan.
 
 CASH2: En barcode ska kunna klistras in i ett fält som sedan uppdaterar varulistan.
 
@@ -33,3 +35,30 @@ Tasks:
 Marcus Norrgård och Benjamin Bergens implementerar user interface.
 Robert Blomqvist skapar SQL-databas.
 Niklas Simons skapar barcode-funktionerna för inskanning av varor.
+
+--------------------------------------------------------------------------------------------------------------
+
+Retrospektmötesprotokoll för sprint 1
+
+21.10.2013
+
+Färdiga user stories:
+
+CASH2: As a cashier, I can add items to the sale by scanning their barcodes.
+
+CASH3: As a cashier, I can add items to the sale by manually entering their barcodes.
+
+CUST4: As a customer, I can see information about each item being scanned by the 
+cashier.
+
+Backloggade user stories:
+
+CUST3: As a customer, I can change my mind in the middle of the sale and remove 
+or add additional items.
+
+Lärdomar och förbättringar inför följande sprint:
+
+Vi var lite sent ute med själva kodandet, vilket är något som vi borde förbättra. 
+Något som är viktigt inför nästa sprint är att dela ut arbetet bättre och få en klarare 
+bild av vad som egentligen behöver göras. Vi hade lite svårt att komma igång, förhoppningsvis
+blir det lättare i fortsättningen nu när vi väl har början till vårt projekt.
