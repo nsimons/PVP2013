@@ -1,0 +1,33 @@
+Kickoffmötesprotokoll för sprint 4
+
+26.11.2013
+
+
+User stories:
+
+CUST7: As a customer, I can leave the items at the cashier desk while I go to my car 
+to get my wallet, and pay for the items later. (Backloggad från förra sprint).
+
+CASH1: As a cashier, I can “shelf” an incomplete sale while the customer gets his or 
+her wallet and complete the sale afterwards. I can serve other customers while the original 
+customer is looking for the wallet. (Backloggad från förra sprint).
+
+CUST5: As a customer, I can see the total sum being updated as new items are being 
+scanned by the cashier.
+
+CASH7: As a cashier, I can manually add discounts to items whose best-before dates 
+are approaching soon.
+
+Prioritetsordning för user stories är följande: CUST5, CUST7, CASH1, CASH7
+
+Definition of done:
+
+CASH1: Listan på varor ska kunna sparas i en tabell som kan återtas när man behöver den.
+
+CUST7: Samma som med CASH1. Listan på varor sparas i en tabell tills kunden kommer tillbaka, därav kan andra kunder betjänas medan man väntar.
+
+CUST5: Kunden ska på en annan skärm se summan av varorna som uppdateras.
+
+CASH7: En funktion som tillåter oss att sätta rabatter på vissa varor.
+
+
