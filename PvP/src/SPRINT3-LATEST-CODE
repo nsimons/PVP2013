@@ -9,9 +9,9 @@ from bs4 import BeautifulStoneSoup as Soup
 import lxml.etree as etree
 import time
 
-cashBoxPath = 'C:\PPVP\CashBox.jar'                 # <---------------
-cardReaderPath = 'C:\PPVP\CardReader.jar'           # <---------------
-productCatalogPath = 'C:\PPVP\ProductCatalog.jar'   # <---------------
+cashBoxPath = '/home/mask/workspace/PvP/src/CashBox.jar'                 # <---------------
+cardReaderPath = '/home/mask/workspace/PvP/src/CardReader.jar'           # <---------------
+productCatalogPath = '/home/mask/workspace/PvP/src/ProductCatalog.jar'   # <---------------
 
 class Ui_MainWindow(object):
     
@@ -137,7 +137,18 @@ class Ui_MainWindow(object):
         self.pushButton_2.clicked.connect(self.traverseDown)
         self.pushButton_3.clicked.connect(self.traverseUp)
         self.pushButton_6.clicked.connect(self.lineEdit.returnPressed)
-        self.pushButton_11.clicked.connect(self.buttonPress)
+        self.pushButton_5.clicked.connect(self.buttonPressZero)
+        self.pushButton_11.clicked.connect(self.buttonPress1)
+        self.pushButton_10.clicked.connect(self.buttonPress2)
+        self.pushButton_9.clicked.connect(self.buttonPress3)
+        self.pushButton_12.clicked.connect(self.buttonPress4)
+        self.pushButton_14.clicked.connect(self.buttonPress5)
+        self.pushButton_16.clicked.connect(self.buttonPress6)
+        self.pushButton_13.clicked.connect(self.buttonPress7)
+        self.pushButton_15.clicked.connect(self.buttonPress8)
+        self.pushButton.clicked.connect(self.buttonPress9)
+        self.pushButton_4.clicked.connect(self.buttonPressCmma)
+        self.pushButton_8.clicked.connect(self.buttonPressPercentage)
         self.pushButton_17.clicked.connect(self.lineReset)
         self.pushButton_17.clicked.connect(self.lineFocus)
         self.pushButton_20.clicked.connect(self.deleteRow)
@@ -169,7 +180,7 @@ class Ui_MainWindow(object):
         self.pushButton_5.setText(QtGui.QApplication.translate("MainWindow", "0", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_6.setText(QtGui.QApplication.translate("MainWindow", "Enter", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_7.setText(QtGui.QApplication.translate("MainWindow", "-", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_8.setText(QtGui.QApplication.translate("MainWindow", "+", None, QtGui.QApplication.UnicodeUTF8))
+        self.pushButton_8.setText(QtGui.QApplication.translate("MainWindow", "%", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_9.setText(QtGui.QApplication.translate("MainWindow", "3", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_10.setText(QtGui.QApplication.translate("MainWindow", "2", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_11.setText(QtGui.QApplication.translate("MainWindow", "1", None, QtGui.QApplication.UnicodeUTF8))
@@ -193,6 +204,25 @@ class Ui_MainWindow(object):
         except:
             self.row = -1
         return self.row
+    
+    #button % press, handles the discount, when the cashier enters the discount the 
+    #table will be updated with the entered discount
+    #discounts must be entered in "." + "digit" format, i.e. .3 will give a discount of 30%
+    
+    def buttonPressPercentage(self):
+        self.r = self.getSelectedRow()
+        self.price = self.tableWidget.selectedItems()
+        #temp placeholder for the price        
+        pris = self.price[2].text()
+        print float(pris)
+        pris = float(pris)
+        prcnt = self.lineEdit.text()
+        prcnt = float(prcnt)        
+        self.price[2] = (int(pris) - (int(pris) * prcnt))
+        print self.price[2]
+        self.tableWidget.setItem(self.row, 2, QtGui.QTableWidgetItem(str(self.price[2])))    
+        
+        
         
     #TODO: update tot when deleting row
     def deleteRow(self):
@@ -255,12 +285,13 @@ class Ui_MainWindow(object):
     def DB(self):
         self.tableWidget.setRowCount(self.rowCount+1)
         line = self.lineEdit.text()
+        
         try: #test if input is int
             line = int(line)
             line = str(line)
             Decimal(self.tot)
             if (line): #test if line exists
-                if MySQLc.cur.execute("select BARCODE,PRODUCT,PRICE from itemtable where BARCODE = " + line + ";"):
+                if MySQLc.cur.execute("select BARCODE,PRODUCT,PRICE from itemTable where BARCODE = " + line + ";"):
                     #test if mysql returns any rows at all
                     for row in MySQLc.cur.fetchall():
                         self.tableWidget.setItem(self.rowCount,0,QtGui.QTableWidgetItem(str(row[0])))
@@ -339,10 +370,41 @@ class Ui_MainWindow(object):
     #sets cursor focus to lineEdit
     def lineFocus(self):
         self.lineEdit.setFocus()
-            
-    #button 1 press test
-    def buttonPress(self): 
+    #button 0 press
+    def buttonPressZero(self):
+        self.lineEdit.setText(self.lineEdit.text() + "0")         
+    #button 1 press
+    def buttonPress1(self): 
         self.lineEdit.setText(self.lineEdit.text() + "1")
+    #button 2 press     
+    def buttonPress2(self):
+        self.lineEdit.setText(self.lineEdit.text() + "2")
+    #button 3 press 
+    def buttonPress3(self):
+        self.lineEdit.setText(self.lineEdit.text() + "3")
+    #button 4 press
+    def buttonPress4(self):
+        self.lineEdit.setText(self.lineEdit.text() + "4")
+    #button 5 press
+    def buttonPress5(self):
+        self.lineEdit.setText(self.lineEdit.text() + "5")
+    #button 6 press
+    def buttonPress6(self):
+        self.lineEdit.setText(self.lineEdit.text() + "6")
+    #button 7 press
+    def buttonPress7(self):
+        self.lineEdit.setText(self.lineEdit.text() + "7")
+    #button 8 press
+    def buttonPress8(self):
+        self.lineEdit.setText(self.lineEdit.text() + "8")
+    #button 9 press
+    def buttonPress9(self):
+        self.lineEdit.setText(self.lineEdit.text() + "9")
+    #button , press
+    def buttonPressCmma(self):
+        self.lineEdit.setText(self.lineEdit.text() + ".") 
+        
+    
         
     #starts CashBox.jar
     def cashBox(self):
@@ -438,6 +500,7 @@ class recieptPainter(QtGui.QWidget):
         self.show()
 
     def paintEvent(self, event):
+        
         qp = QtGui.QPainter()
         qp.begin(self)
         self.drawText(event, qp)
