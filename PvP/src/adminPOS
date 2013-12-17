@@ -1,69 +1,20 @@
-import sys, os 
+import sys, os
 import subprocess as sub
 from PySide import QtCore, QtGui
 from bs4 import BeautifulStoneSoup as Soup
 import lxml.etree as etree
-from MySQLScript import * # <--- REPLACE WITH YOUR MYSQL CLASS
+from MySQLScript import * # <--- YOUR MYSQL CLASS
 import webbrowser
+
+productCatalogPath = '/home/nizze/ProductCatalog.jar'   # <---------------
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(420, 570)
+        MainWindow.resize(420, 300)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         MainWindow.setCentralWidget(self.centralwidget)
-        self.pushButton = QtGui.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(150, 270, 65, 65))
-        self.pushButton.setObjectName("pushButton")
-        self.pushButton_2 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(290, 340, 65, 65))
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.pushButton_3 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_3.setGeometry(QtCore.QRect(290, 270, 65, 65))
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.pushButton_4 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_4.setGeometry(QtCore.QRect(150, 480, 65, 65))
-        self.pushButton_4.setObjectName("pushButton_4")
-        self.pushButton_5 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_5.setGeometry(QtCore.QRect(10, 480, 135, 65))
-        self.pushButton_5.setObjectName("pushButton_5")
-        self.pushButton_6 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_6.setGeometry(QtCore.QRect(220, 410, 65, 135))
-        self.pushButton_6.setObjectName("pushButton_6")
-        self.pushButton_7 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_7.setGeometry(QtCore.QRect(220, 340, 65, 65))
-        self.pushButton_7.setObjectName("pushButton_7")
-        self.pushButton_8 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_8.setGeometry(QtCore.QRect(220, 270, 65, 65))
-        self.pushButton_8.setObjectName("pushButton_8")
-        self.pushButton_9 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_9.setGeometry(QtCore.QRect(150, 410, 65, 65))
-        self.pushButton_9.setObjectName("pushButton_9")
-        self.pushButton_10 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_10.setGeometry(QtCore.QRect(80, 410, 65, 65))
-        self.pushButton_10.setObjectName("pushButton_10")
-        self.pushButton_11 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_11.setGeometry(QtCore.QRect(10, 410, 65, 65))
-        self.pushButton_11.setObjectName("pushButton_11")
-        self.pushButton_12 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_12.setGeometry(QtCore.QRect(10, 340, 65, 65))
-        self.pushButton_12.setObjectName("pushButton_12")
-        self.pushButton_13 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_13.setGeometry(QtCore.QRect(10, 270, 65, 65))
-        self.pushButton_13.setObjectName("pushButton_13")
-        self.pushButton_14 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_14.setGeometry(QtCore.QRect(80, 340, 65, 65))
-        self.pushButton_14.setObjectName("pushButton_14")
-        self.pushButton_15 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_15.setGeometry(QtCore.QRect(80, 270, 65, 65))
-        self.pushButton_15.setObjectName("pushButton_15")
-        self.pushButton_16 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_16.setGeometry(QtCore.QRect(150, 340, 65, 65))
-        self.pushButton_16.setObjectName("pushButton_16")
-        self.pushButton_17 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_17.setGeometry(QtCore.QRect(290, 410, 65, 135))
-        self.pushButton_17.setObjectName("pushButton_17")
         self.dbAddButton = QtGui.QPushButton(self.centralwidget)
         self.dbAddButton.setGeometry(QtCore.QRect(1, 1, 135, 65))
         self.dbAddButton.setObjectName("dbAddButton")
@@ -82,11 +33,11 @@ class Ui_MainWindow(object):
         
         self.label = QtGui.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(150, 1, 500, 90))
-        self.label.setText("Something is about to happen ... ... ... ... ... hopefully")
+        self.label.setText("Something is about to happen ...")
         self.label.setObjectName("label")
         
         self.bcLabel = QtGui.QLabel(self.centralwidget)
-        self.bcLabel.setGeometry(QtCore.QRect(10, 100, 50, 30))
+        self.bcLabel.setGeometry(QtCore.QRect(10, 100, 60, 30))
         self.bcLabel.setText("Barcode")
         self.bcLabel.setObjectName("bcLabel")
         
@@ -124,23 +75,6 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Admin Window", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton.setText(QtGui.QApplication.translate("MainWindow", "9", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_2.setText(QtGui.QApplication.translate("MainWindow", "down", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_3.setText(QtGui.QApplication.translate("MainWindow", "up", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_4.setText(QtGui.QApplication.translate("MainWindow", ",", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_5.setText(QtGui.QApplication.translate("MainWindow", "0", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_6.setText(QtGui.QApplication.translate("MainWindow", "Enter", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_7.setText(QtGui.QApplication.translate("MainWindow", "+", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_8.setText(QtGui.QApplication.translate("MainWindow", "-", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_9.setText(QtGui.QApplication.translate("MainWindow", "3", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_10.setText(QtGui.QApplication.translate("MainWindow", "2", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_11.setText(QtGui.QApplication.translate("MainWindow", "1", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_12.setText(QtGui.QApplication.translate("MainWindow", "4", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_13.setText(QtGui.QApplication.translate("MainWindow", "7", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_14.setText(QtGui.QApplication.translate("MainWindow", "5", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_15.setText(QtGui.QApplication.translate("MainWindow", "8", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_16.setText(QtGui.QApplication.translate("MainWindow", "6", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_17.setText(QtGui.QApplication.translate("MainWindow", "Delete", None, QtGui.QApplication.UnicodeUTF8))
         self.dbAddButton.setText(QtGui.QApplication.translate("MainWindow", "Add to Database", None, QtGui.QApplication.UnicodeUTF8))
         self.bcButton.setText(QtGui.QApplication.translate("MainWindow", "Get info from ProductCatalog", None, QtGui.QApplication.UnicodeUTF8))
         self.browserButton.setText(QtGui.QApplication.translate("MainWindow", "Open ProductCatalog", None, QtGui.QApplication.UnicodeUTF8))
@@ -149,12 +83,12 @@ class Ui_MainWindow(object):
         webbrowser.open('http://localhost:9003/')
         
     def dbAdd(self):
-        MySQLc.cur.execute("insert into itemTable values ('" + self.bcEdit.text() + "','" + 
-                           self.nameEdit.text() + "','" + 
-                           self.priceEdit.text() + "','" + 
+        MySQLc.cur.execute("insert into itemTable values ('" + self.bcEdit.text() + "','" +
+                           self.nameEdit.text() + "','" +
+                           self.priceEdit.text() + "','" +
                            self.vatEdit.text() + "');")
         MySQLc.db.commit()
-        self.label.setText("Added a new item database with properties: \nBarcode: " + 
+        self.label.setText("Added a new item database with properties: \nBarcode: " +
                            self.bcEdit.text() + "\nName: " +
                            self.nameEdit.text() + "\nPrice: " +
                            self.priceEdit.text() + "\nVAT: " +
@@ -163,7 +97,7 @@ class Ui_MainWindow(object):
     def vaadin(self):
         env = dict(os.environ)
         env['JAVA_OPTS'] = 'foo'
-        sub.Popen(['java', '-jar', 'C:\CustomerRegister.jar', 'close_fds=True'], env=env)
+        sub.Popen(['java', '-jar', productCatalogPath, 'close_fds=True'], env=env)
         self.label.setText("vaadin initialized")
         
     def getXML(self):
