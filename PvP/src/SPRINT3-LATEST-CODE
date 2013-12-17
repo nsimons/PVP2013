@@ -1,7 +1,7 @@
 import sys, os
 import subprocess as sub
 from PySide import QtCore, QtGui
-from MySQLScript import * # <--- REPLACE WITH YOUR MYSQL CLASS
+from MySQLScript import * # <--- YOUR MYSQL CLASS
 from decimal import Decimal
 import urllib
 import urllib2
