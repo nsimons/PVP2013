@@ -1,7 +1,7 @@
 import sys, os
 import subprocess as sub
 from PySide import QtCore, QtGui
-from MySQLScript import * # <--- REPLACE WITH YOUR MYSQL CLASS
+from MySQLScript import * # <--- YOUR MYSQL CLASS
 from decimal import Decimal
 import urllib
 import urllib2
@@ -9,9 +9,9 @@ from bs4 import BeautifulStoneSoup as Soup
 import lxml.etree as etree
 import time
 
-cashBoxPath = '/home/mask/workspace/PvP/src/CashBox.jar'                 # <---------------
-cardReaderPath = '/home/mask/workspace/PvP/src/CardReader.jar'           # <---------------
-productCatalogPath = '/home/mask/workspace/PvP/src/ProductCatalog.jar'   # <---------------
+cashBoxPath = '/home/nizze/CashBox.jar'                 # <---------------
+cardReaderPath = '/home/nizze/CardReader.jar'           # <---------------
+productCatalogPath = '/home/nizze/ProductCatalog.jar'   # <---------------
 
 class Ui_MainWindow(object):
     
@@ -80,17 +80,14 @@ class Ui_MainWindow(object):
         self.pushButton_19.setGeometry(QtCore.QRect(350, 260, 65, 65))
         self.pushButton_19.setObjectName("pushButton_19")
         self.pushButton_20 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_20.setGeometry(QtCore.QRect(490, 260, 65, 65))
+        self.pushButton_20.setGeometry(QtCore.QRect(420, 260, 65, 65))
         self.pushButton_20.setObjectName("pushButton_20")
         self.pushButton_21 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_21.setGeometry(QtCore.QRect(420, 260, 65, 65))
+        self.pushButton_21.setGeometry(QtCore.QRect(490, 260, 65, 65))
         self.pushButton_21.setObjectName("pushButton_21")
         self.pushButton_22 = QtGui.QPushButton(self.centralwidget)
         self.pushButton_22.setGeometry(QtCore.QRect(560, 260, 65, 65))
         self.pushButton_22.setObjectName("pushButton_22")
-        self.pushButton_23 = QtGui.QPushButton(self.centralwidget)
-        self.pushButton_23.setGeometry(QtCore.QRect(280, 190, 65, 65))
-        self.pushButton_23.setObjectName("pushButton_23")
 #toggle buttons        
         self.pushButton_18.setCheckable(True)
         self.pushButton_18.setAutoExclusive(True)
@@ -112,11 +109,7 @@ class Ui_MainWindow(object):
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
-        '''
-        self.declarativeView = QtDeclarative.QDeclarativeView(self.centralwidget)
-        self.declarativeView.setGeometry(QtCore.QRect(300, 20, 300, 200))
-        self.declarativeView.setObjectName("declarativeView")
-        '''
+
         self.dbROW = ""
         self.rowCount = 0
         self.tot = 0
@@ -129,7 +122,7 @@ class Ui_MainWindow(object):
         self.totLabel.setFont(self.font)
 #input field        
         self.lineEdit = QtGui.QLineEdit(self.centralwidget)
-        self.lineEdit.setGeometry(QtCore.QRect(282, 160, 341, 25))
+        self.lineEdit.setGeometry(QtCore.QRect(282, 230, 341, 25))
         self.lineEdit.setObjectName("lineEdit")
         self.lineEdit.setFocus()
         self.lineEdit.returnPressed.connect(self.returnPressedHandler)
@@ -156,17 +149,9 @@ class Ui_MainWindow(object):
         self.pushButton_21.setCheckable(True)
         self.pushButton_21.setAutoExclusive(True)
         self.pushButton_21.clicked.connect(self.lineFocus)
-        self.pushButton_22.clicked.connect(self.recieptWindow)
-        self.pushButton_23.clicked.connect(self.waitForPayment)
-        '''
-        self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 25))
-        self.menubar.setObjectName("menubar")
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtGui.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
-        '''
+        
+        self.pushButton_22.clicked.connect(self.waitForPayment)
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -194,8 +179,7 @@ class Ui_MainWindow(object):
         self.pushButton_19.setText(QtGui.QApplication.translate("MainWindow", "Cash", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_20.setText(QtGui.QApplication.translate("MainWindow", "Delete\nItem", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_21.setText(QtGui.QApplication.translate("MainWindow", "Product\nCatalog", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_22.setText(QtGui.QApplication.translate("MainWindow", "Reciept", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_23.setText(QtGui.QApplication.translate("MainWindow", "Credit\nCard", None, QtGui.QApplication.UnicodeUTF8))
+        self.pushButton_22.setText(QtGui.QApplication.translate("MainWindow", "Credit\nCard", None, QtGui.QApplication.UnicodeUTF8))
         
     def getSelectedRow(self):
         try:
@@ -205,42 +189,34 @@ class Ui_MainWindow(object):
             self.row = -1
         return self.row
     
-    #button % press, handles the discount, when the cashier enters the discount the 
+    #button % press, handles the discount, when the cashier enters the discount the
     #table will be updated with the entered discount
     #discounts must be entered in "." + "digit" format, i.e. .3 will give a discount of 30%
-    
     def buttonPressPercentage(self):
         self.r = self.getSelectedRow()
         self.price = self.tableWidget.selectedItems()
-        #temp placeholder for the price        
+        #temp placeholder for the price
         pris = self.price[2].text()
-        print float(pris)
-        pris = float(pris)
+        self.tot -= Decimal(pris)
+        pris = Decimal(pris)
         prcnt = self.lineEdit.text()
-        prcnt = float(prcnt)        
-        self.price[2] = (int(pris) - (int(pris) * prcnt))
-        print self.price[2]
-        self.tableWidget.setItem(self.row, 2, QtGui.QTableWidgetItem(str(self.price[2])))    
+        prcnt = Decimal(prcnt)
+        self.price[2] = (Decimal(pris) - (Decimal(pris) * prcnt))
+        self.tot += Decimal(self.price[2])
+        self.tableWidget.setItem(self.row, 2, QtGui.QTableWidgetItem(str(self.price[2]))) 
+        self.lineReset()
+        self.updateLabels()
         
-        
-        
-    #TODO: update tot when deleting row
     def deleteRow(self):
         try:
             self.r = self.getSelectedRow()
-            self.price = self.tableWidget.selectedItems()
-            print self.price[1].text()
             if (self.r > -1):
-                self.tot -= Decimal(self.price[2].text())
-                self.dbROW = "Last item removed: " + self.price[1].text() + ": " + self.price[2].text() + " euro"
                 self.tableWidget.removeRow(self.r)
                 self.r -= 1
                 self.rowCount -= 1
-                self.updateLabels()
         except:
             print "Nothing selected"
 
-    #TODO: cyclic traverse?
     def traverseDown(self):
         self.r = self.getSelectedRow()
         if (self.r != self.rowCount-1):
@@ -263,35 +239,34 @@ class Ui_MainWindow(object):
         self.lineReset()
         self.updateLabels()
 
-    # TODO: rounding ?
     def payCash(self):
         try:
             self.cash = Decimal(self.lineEdit.text())
             self.tot = Decimal(self.tot)-self.cash
             self.cashBoxOpen()
         except:
-            print "invalid input / cashbox not running"
+            print "invalid input"
 
     def updateLabels(self):
-        if (self.tot >= 0):
+        if (self.tot > 0):
             self.totLabel.setText("Total Price:\n" + str(self.tot) + " euro")
             self.customerTotLabel.setText("Total Price: " + str(self.tot) + " euro")
-        if (self.tot < 0):
+        if (self.tot <= 0):
+            if (self.tot == 0): #so label doesn't display "-0"
+                self.tot *= -1
             self.totLabel.setText("Change back: " + str(self.tot*-1))
             self.dbROW = "Change back: " + str(self.tot*-1)
         self.lastItemLabel.setText(self.dbROW)
       
-    #TODO: reload db when adding stuff in adminPOS(now you have to restart clientPOS)  
     def DB(self):
         self.tableWidget.setRowCount(self.rowCount+1)
         line = self.lineEdit.text()
-        
         try: #test if input is int
             line = int(line)
             line = str(line)
             Decimal(self.tot)
             if (line): #test if line exists
-                if MySQLc.cur.execute("select BARCODE,PRODUCT,PRICE from itemTable where BARCODE = " + line + ";"):
+                if MySQLc.cur.execute("select BARCODE,PRODUCT,PRICE from itemtable where BARCODE = " + line + ";"):
                     #test if mysql returns any rows at all
                     for row in MySQLc.cur.fetchall():
                         self.tableWidget.setItem(self.rowCount,0,QtGui.QTableWidgetItem(str(row[0])))
@@ -351,7 +326,6 @@ class Ui_MainWindow(object):
             
             self.bcButton.clicked.connect(self.barcodeMethod)
             self.bcLineEdit.returnPressed.connect(self.barcodeMethod)
-            
             self.barcodeWindow.show()
             
     #"bruteforce-approach" - puts whatever is in bcLineEdit into lineEdit and then does the normal fetch-from-DB stuff
@@ -370,16 +344,17 @@ class Ui_MainWindow(object):
     #sets cursor focus to lineEdit
     def lineFocus(self):
         self.lineEdit.setFocus()
+            
     #button 0 press
     def buttonPressZero(self):
-        self.lineEdit.setText(self.lineEdit.text() + "0")         
+        self.lineEdit.setText(self.lineEdit.text() + "0")
     #button 1 press
-    def buttonPress1(self): 
+    def buttonPress1(self):
         self.lineEdit.setText(self.lineEdit.text() + "1")
-    #button 2 press     
+    #button 2 press
     def buttonPress2(self):
         self.lineEdit.setText(self.lineEdit.text() + "2")
-    #button 3 press 
+    #button 3 press
     def buttonPress3(self):
         self.lineEdit.setText(self.lineEdit.text() + "3")
     #button 4 press
@@ -404,8 +379,6 @@ class Ui_MainWindow(object):
     def buttonPressCmma(self):
         self.lineEdit.setText(self.lineEdit.text() + ".") 
         
-    
-        
     #starts CashBox.jar
     def cashBox(self):
         env = dict(os.environ)
@@ -429,11 +402,8 @@ class Ui_MainWindow(object):
         params = urllib.urlencode({'amount': self.tot})
         urllib2.urlopen(url, params).read()
         
-        #TODO: find better solution, while-loop means customerPOS is not-responding until card-swipe has been made
-        #for-loop seems to work a bit better.. but still not-responding, good enough for now i guess
-        #while (self.getCardStatus() != "DONE"):
-        
-        for t in range(0,10): #essentially checks cardStatus 10 times, over 30 seconds
+        #essentially checks cardStatus 10 times, over 30 seconds
+        for t in range(0,10): 
             if (self.getCardStatus() == "DONE"):
                 tree = etree.parse("http://localhost:9002/cardreader/result")
                 xml = etree.tostring(tree.getroot())
@@ -473,45 +443,6 @@ class Ui_MainWindow(object):
         print soup.find("barCode").string
         self.lineEdit.setText(soup.find("barCode").string)
         self.DB()
-        
-    def recieptWindow(self):
-        tex = "Reciept for our awesome store\n-------------------------------\n"
-        heigthCounter = 0
-        #loops through our table and prints out each element with containing info
-        for x in range (0, self.rowCount):
-            for y in range (0, 3):
-                tex += self.tableWidget.item(x,y).text()+" "
-                heigthCounter += 1
-            tex += "\n"
-        print tex
-        self.paint = recieptPainter()
-        self.paint.initUI(tex, heigthCounter)
-        
-class recieptPainter(QtGui.QWidget):
-    
-    #konstruktor
-    def __init__(self):
-        super(recieptPainter, self).__init__()
-
-    def initUI(self, textInput, heigth):
-        self.text = textInput
-        self.setGeometry(300, 300, 280, heigth*7+50)
-        self.setWindowTitle('Reciept')
-        self.show()
-
-    def paintEvent(self, event):
-        
-        qp = QtGui.QPainter()
-        qp.begin(self)
-        self.drawText(event, qp)
-        qp.end()
-        
-    def drawText(self, event, qp):
-        qp.setPen(QtGui.QColor(168, 34, 3))
-        qp.setFont(QtGui.QFont('Decorative', 10))
-        qp.drawText(event.rect(), QtCore.Qt.AlignLeft, self.text) 
-
-#from PySide import QtDeclarative
 
 class ControlMainWindow(QtGui.QMainWindow):
     def __init__(self, parent=None):
@@ -520,9 +451,9 @@ class ControlMainWindow(QtGui.QMainWindow):
         self.ui.setupUi(self)
         self.ui.window()
         self.ui.barcodeWindow()
-        self.ui.cashBox()
-        self.ui.cardReader()
-        self.ui.productCatalog()
+        #self.ui.cashBox()
+        #self.ui.cardReader()
+        #self.ui.productCatalog()
   
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
