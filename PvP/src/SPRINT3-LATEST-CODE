@@ -249,7 +249,6 @@ class Ui_MainWindow(object):
         self.lineReset()
         self.updateLabels()
 
-    # TODO: rounding ?
     def payCash(self):
         try:
             self.cash = Decimal(self.lineEdit.text())
